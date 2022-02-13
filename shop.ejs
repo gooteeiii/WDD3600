@@ -1,0 +1,31 @@
+<%- include('includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('includes/navigation.ejs') %>
+
+    <main>
+        <% if (prods.length > 0) { %>
+            <div class="grid">
+                <% for (let product of prods) { %>
+                    <article class="card product-item">
+                        <header class="card__header">
+                            <h1 class="product__title"><%= product.title %></h1>
+                        </header>
+                        <div class="card__image">
+                            <img src="https://www.google.com/imgres?imgurl=https%3A%2F%2Fimages.pexels.com%2Fphotos%2F159866%2Fbooks-book-pages-read-literature-159866.jpeg%3Ffit%3Dcrop%26h%3D1000%26mark%3Dhttps%253A%252F%252Fassets.imgix.net%252F~text%253Fbg%253D80000000%2526txt%253DFree%252BStock%252BPhotos%2526txtalign%253Dcenter%2526txtclr%253Dfff%2526txtfont%253DAvenir-Heavy%2526txtpad%253D20%2526txtsize%253D120%2526w%253D1300%26markalign%3Dcenter%252Cmiddle%26txt%3Dpexels.com%26txtalign%3Dcenter%26txtclr%3Deeffffff%26txtfont%3DAvenir-Heavy%26txtshad%3D10%26txtsize%3D60%26w%3D1500&imgrefurl=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fbook%2520club%2F&tbnid=JnxekyUvH-RDJM&vet=12ahUKEwio3d-Y6Pv1AhXEdc0KHW1tDZsQMygAegUIARDQAQ..i&docid=jKP9tz8d4M2vxM&w=1500&h=1000&q=book%20free%20image&client=firefox-b-1-d&ved=2ahUKEwio3d-Y6Pv1AhXEdc0KHW1tDZsQMygAegUIARDQAQ">
+                        </div>
+                        <div class="card__content">
+                            <h2 class="product__price">$19.99</h2>
+                            <p class="product__description"> A very interesting book about so many things.</p>
+                        </div>
+                    </article>
+                <% } %>
+            </div>
+        <% { else } %>
+            <h1>No Products Found</h1>
+        <% } %>
+    </main>
+
+<%- include('includes/end.ejs') %>
