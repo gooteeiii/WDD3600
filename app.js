@@ -7,7 +7,7 @@ const express = require('express')
 // requires body-parser object, defined on other .js pages
 const bodyParser = require('body-parser')
 
-const errorController = require('./controllers/error')
+const errorController = require('./controllers/error.js')
 
 // creates express object named app
 const app = express()
