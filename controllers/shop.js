@@ -40,6 +40,13 @@ exports.getCart = (req, res, next) => {
   })
 }
 
+// export function to get content for cart page
+exports.postCart = (req, res, next) => {
+  const prodId = req.body.productId
+  console.log(prodId)
+  res.redirect('/cart')
+}
+
 // export function to get content for orders page
 exports.getOrders = (req, res, next) => {
   res.render('shop/orders', {

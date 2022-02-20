@@ -40,6 +40,13 @@ exports.getCart = function (req, res, next) {
     pageTitle: 'Your Cart',
     path: '/cart'
   });
+}; // export function to get content for cart page
+
+
+exports.postCart = function (req, res, next) {
+  var prodId = req.body.productId;
+  console.log(prodId);
+  res.redirect('/cart');
 }; // export function to get content for orders page
 
 
