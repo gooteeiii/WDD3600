@@ -1,6 +1,8 @@
 "use strict";
 
-var Product = require('../models/product');
+// constant holding required product location
+var Product = require('../models/product'); // export function to get all products
+
 
 exports.getProducts = function (req, res, next) {
   Product.fetchall(function (products) {
@@ -10,7 +12,17 @@ exports.getProducts = function (req, res, next) {
       path: '/products'
     });
   });
-};
+}; // export function to get singular product
+
+
+exports.getProduct = function (req, res, next) {
+  var prodId = req.params.productId;
+  Product.findById(prodId, function (product) {
+    console.log(product);
+  });
+  res.redirect('/');
+}; // export function to get content for shop page
+
 
 exports.getIndex = function (req, res, next) {
   Product.fetchall(function (products) {
@@ -20,21 +32,24 @@ exports.getIndex = function (req, res, next) {
       path: '/'
     });
   });
-};
+}; // export function to get content for cart page
+
 
 exports.getCart = function (req, res, next) {
   res.render('shop/cart', {
     pageTitle: 'Your Cart',
     path: '/cart'
   });
-};
+}; // export function to get content for orders page
+
 
 exports.getOrders = function (req, res, next) {
   res.render('shop/orders', {
     pageTitle: 'Your Orders',
     path: '/orders'
   });
-};
+}; // export function to get content for checkout page
+
 
 exports.getCheckout = function (req, res, next) {
   res.render('shop/checkout', {

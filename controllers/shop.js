@@ -1,5 +1,7 @@
+// constant holding required product location
 const Product = require('../models/product')
 
+// export function to get all products
 exports.getProducts = (req, res, next) => {
   Product.fetchall((products) => {
     res.render('shop/product-list', {
@@ -10,6 +12,16 @@ exports.getProducts = (req, res, next) => {
   })
 }
 
+// export function to get singular product
+exports.getProduct = (req, res, next) => {
+  const prodId = req.params.productId
+  Product.findById(prodId, product => {
+    console.log(product)
+  })
+  res.redirect('/')
+}
+
+// export function to get content for shop page
 exports.getIndex = (req, res, next) => {
   Product.fetchall((products) => {
     res.render('shop/index', {
@@ -20,6 +32,7 @@ exports.getIndex = (req, res, next) => {
   })
 }
 
+// export function to get content for cart page
 exports.getCart = (req, res, next) => {
   res.render('shop/cart', {
     pageTitle: 'Your Cart',
@@ -27,6 +40,7 @@ exports.getCart = (req, res, next) => {
   })
 }
 
+// export function to get content for orders page
 exports.getOrders = (req, res, next) => {
   res.render('shop/orders', {
     pageTitle: 'Your Orders',
@@ -34,6 +48,7 @@ exports.getOrders = (req, res, next) => {
   })
 }
 
+// export function to get content for checkout page
 exports.getCheckout = (req, res, next) => {
   res.render('shop/checkout', {
     pageTitle: 'Checkout',
