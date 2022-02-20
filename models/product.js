@@ -1,10 +1,15 @@
+// fs constant is holding a  a File object
 const fs = require('fs')
+
+// path constant is holding a required path object, providing a location to access
 const path = require('path')
 
+// will write data content to products.json file
 const p = path.join(
   path.dirname(process.mainModule.filename),
   'data', 'products.json')
 
+// call back function to read file content
 const getProductsFromFile = cb => {
   fs.readFile(p, (err, fileContent) => {
     if (err) {
@@ -15,6 +20,7 @@ const getProductsFromFile = cb => {
   })
 }
 
+// exports a product object with all relevant data: title, imgUrl, description, price
 module.exports = class Product {
   constructor (title, imageUrl, description, price) {
     this.title = title
@@ -23,6 +29,7 @@ module.exports = class Product {
     this.price = price
   }
 
+  // writes product object data as a string to a file
   save () {
     getProductsFromFile(products => {
       products.push(this)

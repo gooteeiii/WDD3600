@@ -14,11 +14,15 @@
                             <h1 class="product__title"><%= product.title %></h1>
                         </header>
                         <div class="card__image">
-                            <img src="https://media.istockphoto.com/photos/school-picture-id1016131800?b=1&k=20&m=1016131800&s=170667a&w=0&h=imifkJTvS-4b8cvOhVNlCqqvZlwI4S-xCKZ6Oxbla4Q=">
+                            <img src="<%= product.imageUrl %>"
+                                alt="<%= product.title %>">
                         </div>
                         <div class="card__content">
-                            <h2 class="product__price">$19.99</h2>
-                            <p class="product__description"> A very interesting book about so many things.</p>
+                            <h2 class="product__price">$<%= product.price %></h2>
+                            <p class="product__description"> <%= product.description %></p>
+                        </div>
+                        <div class="card_actions">
+                            <button class="btn">Add to Cart</button>
                         </div>
                     </article>
                 <% } %>

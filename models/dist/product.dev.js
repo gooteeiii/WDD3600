@@ -6,11 +6,14 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var fs = require('fs');
+// fs constant is holding a  a File object
+var fs = require('fs'); // path constant is holding a required path object, providing a location to access
 
-var path = require('path');
 
-var p = path.join(path.dirname(process.mainModule.filename), 'data', 'products.json');
+var path = require('path'); // will write data content to products.json file
+
+
+var p = path.join(path.dirname(process.mainModule.filename), 'data', 'products.json'); // call back function to read file content
 
 var getProductsFromFile = function getProductsFromFile(cb) {
   fs.readFile(p, function (err, fileContent) {
@@ -20,7 +23,8 @@ var getProductsFromFile = function getProductsFromFile(cb) {
       cb(JSON.parse(fileContent));
     }
   });
-};
+}; // exports a product object with all relevant data: title, imgUrl, description, price
+
 
 module.exports =
 /*#__PURE__*/
@@ -32,7 +36,8 @@ function () {
     this.imageUrl = imageUrl;
     this.description = description;
     this.price = price;
-  }
+  } // writes product object data as a string to a file
+
 
   _createClass(Product, [{
     key: "save",

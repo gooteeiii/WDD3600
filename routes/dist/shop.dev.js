@@ -1,15 +1,22 @@
 "use strict";
 
-var path = require('path');
+// old  content, not currently used
+var path = require('path'); // express object required
 
-var express = require('express');
 
-var shopController = require('../controllers/shop');
+var express = require('express'); // shopController object required
 
-var router = express.Router();
+
+var shopController = require('../controllers/shop'); // creating object utlizing express router function
+
+
+var router = express.Router(); // all router.get's are providing the path and calling a get function appropriate to the pages content, the content is specific to what shoppers would use
+
 router.get('/', shopController.getIndex);
 router.get('/products', shopController.getProducts);
 router.get('/cart', shopController.getCart);
-router.get('/checkout', shopController.getCheckout);
+router.get('/orders', shopController.getOrders);
+router.get('/checkout', shopController.getCheckout); // export router object to other pages
+
 module.exports = router;
 //# sourceMappingURL=shop.dev.js.map
