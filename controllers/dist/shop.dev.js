@@ -1,7 +1,9 @@
 "use strict";
 
 // constant holding required product location
-var Product = require('../models/product'); // export function to get all products
+var Product = require('../models/product');
+
+var Cart = require('../models/cart'); // export function to get all products
 
 
 exports.getProducts = function (req, res, next) {
@@ -45,7 +47,9 @@ exports.getCart = function (req, res, next) {
 
 exports.postCart = function (req, res, next) {
   var prodId = req.body.productId;
-  console.log(prodId);
+  Product.findById(prodId, function (product) {
+    Cart.addProduct(prodId, product.price);
+  });
   res.redirect('/cart');
 }; // export function to get content for orders page
 

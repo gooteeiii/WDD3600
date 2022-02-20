@@ -1,6 +1,8 @@
 // constant holding required product location
 const Product = require('../models/product')
 
+const Cart = require('../models/cart')
+
 // export function to get all products
 exports.getProducts = (req, res, next) => {
   Product.fetchall((products) => {
@@ -43,7 +45,9 @@ exports.getCart = (req, res, next) => {
 // export function to get content for cart page
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId
-  console.log(prodId)
+  Product.findById(prodId, (product) => {
+    Cart.addProduct(prodId, product.price)
+  })
   res.redirect('/cart')
 }
 

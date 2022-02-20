@@ -60,6 +60,8 @@ function () {
         if (existingProduct) {
           updatedProduct = _objectSpread({}, existingProduct);
           updatedProduct.qty = updatedProduct.qty + 1;
+          cart.products = _toConsumableArray(cart.products);
+          cart.products[existingProductIndex] = updatedProduct;
         } else {
           updatedProduct = {
             id: id,
@@ -68,7 +70,10 @@ function () {
           cart.products = [].concat(_toConsumableArray(cart.products), [updatedProduct]);
         }
 
-        cart.totalPrice = cart.totalPrice + productPrice;
+        cart.totalPrice = cart.totalPrice + +productPrice;
+        fs.writeFile(p, JSON.stringify(cart), function (err) {
+          console.log(err);
+        });
       });
     }
   }]);
