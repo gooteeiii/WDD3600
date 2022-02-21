@@ -76,6 +76,29 @@ function () {
         });
       });
     }
+  }, {
+    key: "deleteProduct",
+    value: function deleteProduct(id, productPrice) {
+      fs.readFile(p, function (err, fileContent) {
+        if (err) {
+          return;
+        }
+
+        var updatedCart = _objectSpread({}, JSON.parse(fileContent));
+
+        var product = updatedCart.products.find(function (prod) {
+          return prod.id === id;
+        });
+        var productQty = product.qty;
+        updatedCart.products = updatedCart.products.filter(function (prod) {
+          return prod.id !== id;
+        });
+        updatedCart.totalPrice = updatedCart.totalPrice - productPrice * productQty;
+        fs.writeFile(p, JSON.stringify(updatedCart), function (err) {
+          console.log(err);
+        });
+      });
+    }
   }]);
 
   return Cart;

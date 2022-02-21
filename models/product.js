@@ -4,6 +4,8 @@ const fs = require('fs')
 // path constant is holding a required path object, providing a location to access
 const path = require('path')
 
+const Cart = require('./cart')
+
 // will write data content to products.json file
 const p = path.join(
   path.dirname(process.mainModule.filename),
@@ -47,6 +49,18 @@ module.exports = class Product {
           console.log(err)
         })
       }
+    })
+  }
+
+  static deleteById (id) {
+    getProductsFromFile(products => {
+      const product = products.find(prod => prod.id === id)
+      const updatedProducts = products.filter(prod => prod.id !== id)
+      fs.writeFile(p, JSON.stringify(updatedProducts), err => {
+        if (!err) {
+          Cart.deleteProduct(id, product.price)
+        }
+      })
     })
   }
 

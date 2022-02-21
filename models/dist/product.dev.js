@@ -18,7 +18,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var fs = require('fs'); // path constant is holding a required path object, providing a location to access
 
 
-var path = require('path'); // will write data content to products.json file
+var path = require('path');
+
+var Cart = require('./cart'); // will write data content to products.json file
 
 
 var p = path.join(path.dirname(process.mainModule.filename), 'data', 'products.json'); // call back function to read file content
@@ -73,9 +75,26 @@ function () {
           });
         }
       });
+    }
+  }], [{
+    key: "deleteById",
+    value: function deleteById(id) {
+      getProductsFromFile(function (products) {
+        var product = products.find(function (prod) {
+          return prod.id === id;
+        });
+        var updatedProducts = products.filter(function (prod) {
+          return prod.id !== id;
+        });
+        fs.writeFile(p, JSON.stringify(updatedProducts), function (err) {
+          if (!err) {
+            Cart.deleteProduct(id, product.price);
+          }
+        });
+      });
     } // similar to a utility function that calls not on a single instance of an object but retrieves all data from object.
 
-  }], [{
+  }, {
     key: "fetchall",
     value: function fetchall(cb) {
       getProductsFromFile(cb);
