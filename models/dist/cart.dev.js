@@ -25,9 +25,7 @@ var fs = require('fs');
 var path = require('path'); // will write data content to products.json file
 
 
-var p = path.join(path.dirname(process.mainModule.filename), 'data', 'cart.json'); // constant holding required product location
-
-var Product = require('./product');
+var p = path.join(path.dirname(process.mainModule.filename), 'data', 'cart.json');
 
 module.exports =
 /*#__PURE__*/
@@ -89,6 +87,11 @@ function () {
         var product = updatedCart.products.find(function (prod) {
           return prod.id === id;
         });
+
+        if (!product) {
+          return;
+        }
+
         var productQty = product.qty;
         updatedCart.products = updatedCart.products.filter(function (prod) {
           return prod.id !== id;
@@ -97,6 +100,19 @@ function () {
         fs.writeFile(p, JSON.stringify(updatedCart), function (err) {
           console.log(err);
         });
+      });
+    }
+  }, {
+    key: "getProducts",
+    value: function getProducts(cb) {
+      fs.readFile(p, function (err, fileContent) {
+        var cart = JSON.parse(fileContent);
+
+        if (err) {
+          cb(null);
+        } else {
+          cb(cart);
+        }
       });
     }
   }]);
