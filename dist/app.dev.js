@@ -9,7 +9,9 @@ var express = require('express'); // requires body-parser object, defined on oth
 
 var bodyParser = require('body-parser');
 
-var errorController = require('./controllers/error.js'); // creates express object named app
+var errorController = require('./controllers/error.js');
+
+var db = require('./util/database'); // creates express object named app
 
 
 var app = express(); // sets global config value, this is settings the default engine and its location
