@@ -7,14 +7,14 @@ var Sequelize = require('sequelize'); // import sequlize from database file
 var sequelize = require('../util/database'); // cart model defined
 
 
-var Cart = sequelize.define('cart', {
+var Order = sequelize.define('order', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   }
-}); // export cart.js
+}); // export cart-item.js
 
-module.exports = Cart;
-//# sourceMappingURL=cart.dev.js.map
+module.exports = Order;
+//# sourceMappingURL=order.dev.js.map

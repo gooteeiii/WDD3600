@@ -1,18 +1,16 @@
-// import sequelize
 const Sequelize = require('sequelize')
 
-// import sequlize from database file
 const sequelize = require('../util/database')
 
-// cart model defined
-const Cart = sequelize.define('cart', {
+const User = sequelize.define('user', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
-  }
+  },
+  name: Sequelize.STRING,
+  email: Sequelize.STRING
 })
 
-// export cart.js
-module.exports = Cart
+module.exports = User
