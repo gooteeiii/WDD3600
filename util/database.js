@@ -1,10 +1,23 @@
-// constant used to import mysql2 for use
-const Sequelize = require('sequelize')
+// import mongodb
+const mongodb = require('mongodb')
 
-// pool object created and used to provide db and login info
-const sequelize = new Sequelize('node-complete', 'root', '1234', {
-  dialect: 'mysql',
-  host: 'localhost'
-})
+// extract mongoclient constructor
+const MongoClient = mongodb.MongoClient
 
-module.exports = sequelize
+// method wrapper for connection
+const mongoConnect = (callback) => {
+  // create connection to mongodb
+  MongoClient.connect(
+    'mongodb+srv://aj:1234@cluster0.v0uea.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+  )
+    .then(client => {
+      console.log('Connected!')
+      callback(client)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+// export methods
+module.exports = mongoConnect
