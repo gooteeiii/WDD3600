@@ -100,7 +100,8 @@ class User {
       })
   }
 
-  getOrder () {
+   //getOrder () { //REMOVED BY AH
+  getOrders () { //ADDED BY AH
     const db = getDb()
     return db
       .collection('orders')
@@ -108,15 +109,22 @@ class User {
       .toArray()
   }
 
-  static findById (userId) {
+  //static findById (userId) { //REMOVED BY AH
+  static findById(userId) { //ADDED BY AH
     const db = getDb()
     return db
       .collection('users')
       .findOne({ _id: new ObjectId(userId) })
-      .then()
-      .catch(err => {
-        console.log(err)
+      //.then() //REMOVED BY AH
+      //.catch(err => { //REMOVED BY AH
+       // console.log(err) //REMOVED BY AH
+	  .then(user => { //ADDED BY AH
+        console.log(user); //ADDED BY AH
+        return user; //ADDED BY AH
       })
+	  .catch(err => {//ADDED BY AH
+        console.log(err);//ADDED BY AH
+      });//ADDED BY AH
   }
 }
 
