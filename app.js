@@ -36,7 +36,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // registering middleware, function call to database to retrieve user
 app.use((req, res, next) => {
-  User.findByPk('1')
+ // User.findByPk('1') //REMOVED BY AH
+  User.findById('1') //ADDED BY AH
     .then(user => {
       req.user = new User(user.name, user.email, user.cart, user._id)
       next()
