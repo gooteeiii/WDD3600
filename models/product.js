@@ -51,7 +51,8 @@ class Product {
       })
   }
 
-  static findbyid (prodId) {
+  //static findbyid (prodId) { //REMOVED BY AH
+  static findById(prodId) {    //ADDED BY AH
     const db = getDb()
     return db
       .collection('products')
