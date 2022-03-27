@@ -27,6 +27,7 @@ app.set('views', 'views')
 // creates objects with a path defined
 const adminRoutes = require('./routes/admin')
 const shopRoutes = require('./routes/shop')
+const { MongoKerberosError } = require('mongodb')
 
 // not sure
 app.use(bodyParser.urlencoded({ extended: false }))

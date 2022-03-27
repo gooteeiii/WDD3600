@@ -26,7 +26,10 @@ app.set('views', 'views'); // creates objects with a path defined
 
 var adminRoutes = require('./routes/admin');
 
-var shopRoutes = require('./routes/shop'); // not sure
+var shopRoutes = require('./routes/shop');
+
+var _require = require('mongodb'),
+    MongoKerberosError = _require.MongoKerberosError; // not sure
 
 
 app.use(bodyParser.urlencoded({
