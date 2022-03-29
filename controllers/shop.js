@@ -19,7 +19,8 @@ exports.getProducts = (req, res, next) => {
 // export function to get singular product
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId
-  Product.findByPk(prodId)
+    //Product.findByPk(prodId) //REMOVED BY AH
+  Product.findById(prodId) //ADDED BY AH
     .then(product => {
       res.render('shop/product-detail', {
         product: product,
@@ -62,7 +63,9 @@ exports.getCart = (req, res, next) => {
 // export function to get content for cart page
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId
-  Product.findbyid(prodId).then(product => {
+    //Product.findbyid(prodId)//REMOVED BY AH
+  Product.findById(prodId)//ADDED BY AH
+   .then(product => { //PLACED ON NEW LINE BY AH
     return req.user.addToCart(product)
   })
     .then(result => {
