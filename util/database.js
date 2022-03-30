@@ -11,7 +11,7 @@ let _db; //ADDED BY AH
 const mongoConnect = callback => { //ADDED BY AH
   // create connection to mongodb
   MongoClient.connect(
-    'mongodb+srv://aj:1234@cluster0.v0uea.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    'mongodb+srv://aj:1234@cluster0.v0uea.mongodb.net/shop?retryWrites=true&w=majority'
   )
     .then(client => {
       console.log('Connected!')
