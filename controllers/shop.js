@@ -1,10 +1,14 @@
 // constant holding required product location
 const Product = require('../models/product')
 
+// import order model
+const Order = require('../models/order')
+
 // export function to get all products
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then(products => {
+      console.log(products)
       res.render('shop/product-list', {
         prods: products,
         pageTitle: 'All Products',
@@ -19,8 +23,7 @@ exports.getProducts = (req, res, next) => {
 // export function to get singular product
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId
-    //Product.findByPk(prodId) //REMOVED BY AH
-  Product.findById(prodId) //ADDED BY AH
+  Product.findById(prodId)
     .then(product => {
       res.render('shop/product-detail', {
         product: product,
@@ -33,7 +36,7 @@ exports.getProduct = (req, res, next) => {
 
 // export function to get content for shop page
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then(products => {
       res.render('shop/index', {
         prods: products,
@@ -49,8 +52,10 @@ exports.getIndex = (req, res, next) => {
 // export function to get content for cart page
 exports.getCart = (req, res, next) => {
   req.user
-    .getCart()
-    .then(products => {
+    .populate('cart.items.productId')
+    .execPopulate()
+    .then(user => {
+      const products = user.cart.items
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
@@ -63,9 +68,8 @@ exports.getCart = (req, res, next) => {
 // export function to get content for cart page
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId
-    //Product.findbyid(prodId)//REMOVED BY AH
-  Product.findById(prodId)//ADDED BY AH
-   .then(product => { //PLACED ON NEW LINE BY AH
+  Product.findById(prodId)
+   .then(product => {
     return req.user.addToCart(product)
   })
     .then(result => {
@@ -107,18 +111,35 @@ exports.postCart = (req, res, next) => {
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId
   req.user
-    .deleteItemFromCart(prodId)
+    .removeFromCart(prodId)
     .then(result => {
       res.redirect('/cart')
     })
     .catch(err => console.log(err))
 }
-// something
+// export function to get products from user cart then redirect to orders page
 exports.postOrder = (req, res, next) => {
-  let fetchedCart
   req.user
-    .addOrder()
+    .populate('cart.items.productId')
+    .execPopulate()
+    .then(user => {
+      console.log(user.cart.items)
+      const products = user.cart.items.map(i => {
+        return {quantity: i.quantity, product: { ...i.productId._doc } }
+      })
+      const order = new Order({
+        user: {
+          name: req.user.name,
+          userId: req.user
+        },
+        products: products
+      })
+      return order.save()
+    })
     .then(result => {
+      return req.user.clearCart()
+    })
+    .then(() => {
       res.redirect('/orders')
     })
     .catch(err => console.log(err))
@@ -126,14 +147,13 @@ exports.postOrder = (req, res, next) => {
 
 // export function to get content for orders page
 exports.getOrders = (req, res, next) => {
-  req.user
-    .getOrders()
-    .then(orders => {
-      res.render('shop/orders', {
-        path: '/orders',
-        pageTitle: 'Your Orders',
-        orders: orders
-      })
+  Order.find({ 'user.userId': req.user._id })
+  .then(orders => {
+    res.render('shop/orders', {
+      path: '/orders',
+      pageTitle: 'Your Orders',
+      orders: orders
     })
-    .catch(err => console.log(err))
+  })
+  .catch(err => console.log(err))
 }

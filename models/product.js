@@ -1,4 +1,38 @@
+// import mongoose
+const mongoose = require('mongoose')
+
+// create schema object
+const Schema = mongoose.Schema
+
+// assign elements to new schema object
+const productSchema = new Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  imageUrl: {
+    type: String,
+    required: true
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
+})
+
+module.exports = mongoose.model('Product', productSchema)
+
 // import mongodb
+/*
 const mongodb = require('mongodb')
 
 // import getDb
@@ -81,3 +115,4 @@ class Product {
   }
 }
 module.exports = Product
+*/

@@ -1,18 +1,29 @@
-// import sequelize
-const Sequelize = require('sequelize')
+// import mongoose
+const mongooose = require('mongoose')
 
-// import sequlize from database file
-const sequelize = require('../util/database')
+// create schema object
+const Schema = mongoose.Schema
 
-// cart model defined
-const Order = sequelize.define('order', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true
-  }
+// assign elements to schema object
+const orderSchema = new Schema({
+    products:[
+        {
+            product: { type: Object, required: true },
+            quantity: { type: Number, required: true }
+        }
+    ],
+    user: {
+        name: {
+            type: String,
+            required: true
+        },
+        userId: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: 'User'
+        }
+    }
 })
 
-// export cart-item.js
-module.exports = Order
+// export schema
+module.exports = mongoose.model('Order', orderSchema)

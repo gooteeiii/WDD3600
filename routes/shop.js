@@ -27,7 +27,5 @@ router.post('/create-order', shopController.postOrder)
 
 router.get('/orders', shopController.getOrders)
 
-// router.get('/checkout', shopController.getCheckout)
-
 // export router object to other pages
 module.exports = router

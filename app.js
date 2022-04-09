@@ -7,11 +7,11 @@ const express = require('express')
 // requires body-parser object, defined on other .js pages
 const bodyParser = require('body-parser')
 
+// importing mongoose
+const mongoose = require('mongoose')
+
 // imports error controller location
 const errorController = require('./controllers/error')
-
-// import mongoconnect method
-const mongoConnect = require('./util/database').mongoConnect
 
 // import User model
 const User = require('./models/user')
@@ -35,12 +35,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // defines a location to allow access to files you otherwise could not access
 app.use(express.static(path.join(__dirname, 'public')))
 
-// registering middleware, function call to database to retrieve user
+// registering middleware, function call to database to retrieve user, dummy user id used
 app.use((req, res, next) => {
- // User.findByPk('1') //REMOVED BY AH
-  User.findById('62439e625b089da73a1471d7') //ADDED BY AH
+  User.findById('624b845138212100a7d454ed')
     .then(user => {
-      req.user = new User(user.name, user.email, user.cart, user._id)
+      req.user = user
       next()
     })
     .catch(err => console.log(err))
@@ -53,7 +52,24 @@ app.use(shopRoutes)
 // defines response for a url error 404
 app.use(errorController.get404)
 
-// execute mongoconnect method
-mongoConnect(() => {
+// execute mongoose connect method, if no user in DB then create dummy user
+mongoose
+.connect('mongodb+srv://aj:1234@cluster0.v0uea.mongodb.net/shop?retryWrites=true&w=majority')
+.then(result => {
+  User.findOne().then(user => {
+    if (!user) {
+      const user = new User({
+        name: 'AJ',
+        email: 'aj@test.com',
+        cart: {
+          items: []
+        }
+      })
+      user.save()
+    }
+  })
   app.listen(3000)
+})
+.catch(err => {
+  console.log(err)
 })
