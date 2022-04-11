@@ -1,5 +1,5 @@
 // import mongoose
-const mongooose = require('mongoose')
+const mongoose = require('mongoose')
 
 // create schema object
 const Schema = mongoose.Schema
