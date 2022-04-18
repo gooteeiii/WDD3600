@@ -16,6 +16,12 @@ const session = require('express-session')
 // import mongodbStore
 const MongoDBStore = require('connect-mongodb-session')(session)
 
+//import csurf, this provided session tokens to protect against csrf attacks
+const csrf = require('csurf')
+
+// import connect-flash
+const flash = require('connect-flash')
+
 // imports error controller location
 const errorController = require('./controllers/error')
 
@@ -26,6 +32,9 @@ const User = require('./models/user')
 const app = express()
 
 const MONGODB_URI = 'mongodb+srv://aj:1234@cluster0.v0uea.mongodb.net/shop'
+
+// initialize csrf object
+const csrfProtection = csrf()
 
 // initialize new store
 const store = new MongoDBStore({
@@ -59,6 +68,10 @@ app.use(
     store: store
   })
 )
+app.use(csrfProtection)
+
+// initialize flash
+app.use(flash())
 
 //middleware to take session data and load mongo models
 app.use((req, res, next) => {
@@ -82,6 +95,14 @@ app.use((req, res, next) => {
     })
     .catch(err => console.log(err))
 })
+
+// applies isAuthenticated and csrfToken to all rendered views
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn
+  res.locals.csrfToken = req.csrfToken()
+  next()
+})
+
 
 // defines page locations
 app.use('/admin', adminRoutes)
