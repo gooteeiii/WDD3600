@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 
 // registering middleware, function call to database to retrieve user, dummy user id used
 app.use((req, res, next) => {
-  User.findById('624b845138212100a7d454ed')
+  User.findById('625f2f0efbb8c5108a99231b')
     .then(user => {
       req.user = user
       next()
