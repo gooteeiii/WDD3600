@@ -1,7 +1,9 @@
+/*visual alignment of content*/
 .form-control {
   margin: 1rem 0;
 }
 
+/*visual alignment of content*/
 .form-control label,
 .form-control input,
 .form-control textarea {
@@ -10,6 +12,7 @@
   margin-bottom: 0.25rem;
 }
 
+/*color of input and text fields when not focused or in error*/
 .form-control input,
 .form-control textarea {
   border: 1px solid #a1a1a1;
@@ -17,7 +20,14 @@
   border-radius: 2px;
 }
 
+/*highlights focused fields*/
 .form-control input:focus,
 .form-control textarea:focus {
   outline-color: #00695c;
+}
+
+/* red border around input and text areas when in error*/
+.form-control input.invalid,
+.form-control textarea.invalid {
+  border-color: red
 }
