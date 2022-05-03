@@ -73,6 +73,13 @@ app.use(csrfProtection)
 // initialize flash
 app.use(flash())
 
+// applies isAuthenticated and csrfToken to all rendered views
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn
+  res.locals.csrfToken = req.csrfToken()
+  next()
+})
+
 //middleware to take session data and load mongo models
 app.use((req, res, next) => {
   if (!req.session.user) {
@@ -80,10 +87,15 @@ app.use((req, res, next) => {
   }
   User.findById(req.session.user._id)
     .then(user => {
+      if(!user) {
+        return next()
+      }
       req.user = user
       next()
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      next(new Error(err))
+    })
 })
 
 // registering middleware, function call to database to retrieve user, dummy user id used
@@ -96,21 +108,27 @@ app.use((req, res, next) => {
     .catch(err => console.log(err))
 })
 
-// applies isAuthenticated and csrfToken to all rendered views
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn
-  res.locals.csrfToken = req.csrfToken()
-  next()
-})
-
-
 // defines page locations
 app.use('/admin', adminRoutes)
 app.use(shopRoutes)
 app.use(authRoutes)
 
+// get for error 500
+app.get('/500', errorController.get500)
+
 // defines response for a url error 404
 app.use(errorController.get404)
+
+//error handling middleware, skips above error handling
+app.use((error, req, res, next) => {
+  // res.status(error.httpStatusCode).render(...)
+  // res.redirect('/500')
+  res.status(500).render('500', { 
+    pageTitle: 'Error', 
+    path: '/500',
+    isAuthenticated: req.session.isLoggedIn
+  })
+})
 
 // execute mongoose connect method, if no user in DB then create dummy user
 mongoose
