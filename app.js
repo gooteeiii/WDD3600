@@ -22,6 +22,9 @@ const csrf = require('csurf')
 // import connect-flash
 const flash = require('connect-flash')
 
+//import multer
+const multer = require('multer')
+
 // imports error controller location
 const errorController = require('./controllers/error')
 
@@ -36,14 +39,36 @@ const MONGODB_URI = 'mongodb+srv://aj:1234@cluster0.v0uea.mongodb.net/shop'
 // initialize csrf object
 const csrfProtection = csrf()
 
+// file storage object for image file
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images')
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname)
+  }
+})
+
 // initialize new store
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions'
 })
 
-// sets global config value, this is settings the default engine and its location
+// fileFilter constant to provide image data types for multer
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true)
+  } else {
+    cb(null, false)
+  }
+}
 
+// sets global config value, this is settings the default engine and its location
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
@@ -53,11 +78,15 @@ const shopRoutes = require('./routes/shop')
 const { MongoKerberosError } = require('mongodb')
 const authRoutes = require('./routes/auth')
 
-// not sure
+// defines bodparser encoding for url
 app.use(bodyParser.urlencoded({ extended: false }))
+
+//defines multer object and assign data expected as a single file
+app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single('image'))
 
 // defines a location to allow access to files you otherwise could not access
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/images', express.static(path.join(__dirname, 'images')))
 
 // session middleware setup
 app.use(
