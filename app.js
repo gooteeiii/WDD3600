@@ -28,6 +28,12 @@ const multer = require('multer')
 // imports error controller location
 const errorController = require('./controllers/error')
 
+// shopController object required
+const shopController = require('./controllers/shop')
+
+//import middle auth check script
+const isAuth = require('./middleware/is-auth')
+
 // import User model
 const User = require('./models/user')
 
@@ -97,7 +103,7 @@ app.use(
     store: store
   })
 )
-app.use(csrfProtection)
+
 
 // initialize flash
 app.use(flash())
@@ -105,7 +111,6 @@ app.use(flash())
 // applies isAuthenticated and csrfToken to all rendered views
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn
-  res.locals.csrfToken = req.csrfToken()
   next()
 })
 
@@ -138,6 +143,13 @@ app.use((req, res, next) => {
 })
 
 // defines page locations
+app.post('/create-order', isAuth, shopController.postOrder)
+app.use(csrfProtection)
+// applies isAuthenticated and csrfToken to all rendered views
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn
+  next()
+})
 app.use('/admin', adminRoutes)
 app.use(shopRoutes)
 app.use(authRoutes)
@@ -152,7 +164,7 @@ app.use(errorController.get404)
 app.use((error, req, res, next) => {
   // res.status(error.httpStatusCode).render(...)
   // res.redirect('/500')
-
+  console.log(error)
   res.status(500).render('500', { 
     pageTitle: 'Error', 
     path: '/500',
