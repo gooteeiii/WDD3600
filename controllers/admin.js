@@ -1,5 +1,7 @@
 //import validationResult function
 const { validationResult } = require('express-validator')
+
+const fileHelper = require('../util/file')
 const { CommandFailedEvent } = require('mongodb')
 
 const Product = require('../models/product')
@@ -155,9 +157,9 @@ exports.postEditProduct = (req, res, next) => {
     product.price = updatedPrice
     product.description = updatedDesc
     if (image) {
+      fileHelper.deleteFile(product.imageUrl)
       product.imageUrl = image.path
     }
-    product.imageUrl = updatedImageUrl
     return product.save()
     .then(result => {
       console.log('Updated Product!')
@@ -192,14 +194,21 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId
-  Product.deleteOne({_id: prodId, userId: req.user._id})
-    .then(() => {
-      console.log('Destroyed Product!')
-      res.redirect('/admin/products')
-    })
-    .catch(err => {
-      const error = new Error(err)
-      error.httpStatusCode = 500
-      return next(error)
-    })
+  Product.findById(prodId)
+  .then(product => {
+    if (!product) {
+      return next(new Error('Product not found.'))
+    }
+    fileHelper.deleteFile(product.imageUrl)
+    return Product.deleteOne({_id: prodId, userId: req.user._id})
+  })
+  .then(() => {
+    console.log('Destroyed Product!')
+    res.redirect('/admin/products')
+  })
+  .catch(err => {
+    const error = new Error(err)
+    error.httpStatusCode = 500
+    return next(error)
+  })
 }
