@@ -27,7 +27,9 @@ router.post(
             .isAlphanumeric()
             .trim()
     ],
+    
     authController.postLogin
+    
 )
 
 // provides requirements to email and password user entry on signup page
